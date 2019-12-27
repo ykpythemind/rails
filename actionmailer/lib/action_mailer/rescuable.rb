@@ -20,10 +20,11 @@ module ActionMailer #:nodoc:
     end
 
     private
-      def process(*args, **kwargs)
+      def process(*)
         handle_exceptions do
-          super(*args, **kwargs)
+          super
         end
       end
+      ruby2_keywords :process if respond_to?(:ruby2_keywords, true)
   end
 end

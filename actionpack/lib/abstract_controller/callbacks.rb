@@ -37,11 +37,12 @@ module AbstractController
 
     # Override <tt>AbstractController::Base#process_action</tt> to run the
     # <tt>process_action</tt> callbacks around the normal behavior.
-    def process_action(*args, **kwargs)
+    def process_action(*)
       run_callbacks(:process_action) do
-        super(*args, **kwargs)
+        super
       end
     end
+    ruby2_keywords :process_action if respond_to?(:ruby2_keywords, true)
 
     module ClassMethods
       # If +:only+ or +:except+ are used, convert the options into the

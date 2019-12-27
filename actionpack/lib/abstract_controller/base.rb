@@ -124,7 +124,7 @@ module AbstractController
     #
     # ==== Returns
     # * <tt>self</tt>
-    def process(action, *args, **kwargs)
+    def process(action, *args)
       @_action_name = action.to_s
 
       unless action_name = _find_action_name(@_action_name)
@@ -133,8 +133,9 @@ module AbstractController
 
       @_response_body = nil
 
-      process_action(action_name, *args, **kwargs)
+      process_action(action_name, *args)
     end
+    ruby2_keywords :process if respond_to?(:ruby2_keywords, true)
 
     # Delegates to the class' ::controller_path
     def controller_path
@@ -191,9 +192,10 @@ module AbstractController
       #
       # Notice that the first argument is the method to be dispatched
       # which is *not* necessarily the same as the action name.
-      def process_action(method_name, *args, **kwargs)
-        send_action(method_name, *args, **kwargs)
+      def process_action(method_name, *args)
+        send_action(method_name, *args)
       end
+      ruby2_keywords :process_action if respond_to?(:ruby2_keywords, true)
 
       # Actually call the method associated with the action. Override
       # this method if you wish to change how action methods are called,

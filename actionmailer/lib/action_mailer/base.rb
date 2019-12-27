@@ -612,13 +612,14 @@ module ActionMailer
         payload[:perform_deliveries] = mail.perform_deliveries
       end
 
-      def method_missing(method_name, *args, **kwargs)
+      def method_missing(method_name, *args)
         if action_methods.include?(method_name.to_s)
-          MessageDelivery.new(self, method_name, *args, **kwargs)
+          MessageDelivery.new(self, method_name, *args)
         else
           super
         end
       end
+      ruby2_keywords(:method_missing) if respond_to?(:ruby2_keywords, true)
 
       def respond_to_missing?(method, include_all = false)
         action_methods.include?(method.to_s) || super
@@ -633,7 +634,7 @@ module ActionMailer
       @_message = Mail.new
     end
 
-    def process(method_name, *args, **kwargs) #:nodoc:
+    def process(method_name, *args) #:nodoc:
       payload = {
         mailer: self.class.name,
         action: method_name,
@@ -641,10 +642,11 @@ module ActionMailer
       }
 
       ActiveSupport::Notifications.instrument("process.action_mailer", payload) do
-        super(method_name, *args, **kwargs)
+        super
         @_message = NullMail.new unless @_mail_was_called
       end
     end
+    ruby2_keywords(:process) if respond_to?(:ruby2_keywords, true)
 
     class NullMail #:nodoc:
       def body; "" end

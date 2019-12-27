@@ -34,12 +34,13 @@ module ActionView
     end
 
     # Overwrite process to setup I18n proxy.
-    def process(*args, **kwargs) #:nodoc:
+    def process(*) #:nodoc:
       old_config, I18n.config = I18n.config, I18nProxy.new(I18n.config, lookup_context)
-      super(*args, **kwargs)
+      super
     ensure
       I18n.config = old_config
     end
+    ruby2_keywords :process if respond_to?(:ruby2_keywords, true)
 
     module ClassMethods
       def _routes
